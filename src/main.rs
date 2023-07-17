@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, BufReader, Write};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 struct ListNode {
@@ -29,7 +29,6 @@ impl ListNode {
         Err(_) => return -1,
     }
    }
-
  }
 
 fn parse_str_to_int(str_value: &str) -> i32 {
@@ -75,16 +74,38 @@ fn add_vec_values(values_vec: Vec<i32>) -> i32{
     return added_sum
 }
 
+fn integer_to_string_vec(value_int: i32) -> String{
+    let value_str = value_int.to_string();
+    let value_str_vec: Vec<String> = value_str.chars().map(|char| char.to_string()).collect();
+    let values_str = value_str_vec.join(",");
+    return values_str;
+}
+
+fn write_result_to_file(file_path: &str, values_str: String){
+    let mut file = File::create(file_path);
+    match file{
+        Ok(mut file) => {
+            match file.write_all(values_str.as_bytes()){
+                Ok(_) => println!("Write successful."),
+                Err(error) => println!("Error writing to file: {}", error),
+            }
+        }
+        Err(error) => {
+            println!("no file {} found, error {}", file_path, error)
+        }
+    }
+}
+
 fn main() {
-    let file_path = "./data/arrays.txt"; 
-    let head_node_vec: Vec<ListNode> = handle_file_to_linked_lists(file_path);
+    let file_input_path = "./data/arrays.txt";
+    let file_output_path = "./data/result.txt";
+    let head_node_vec: Vec<ListNode> = handle_file_to_linked_lists(file_input_path);
     let mut values_vec = Vec::new();
     for node in head_node_vec{
         values_vec.push(node.return_integer_value());
     }
-    println!("added values: {:?}", values_vec);
     let added_sum = add_vec_values(values_vec);
-    println!("added sum: {:?}", added_sum);
-
+    let values_str = integer_to_string_vec(added_sum);
+    write_result_to_file(file_output_path, values_str);
 }
 
