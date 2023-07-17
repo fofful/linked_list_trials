@@ -9,19 +9,11 @@ struct ListNode {
  }
 
 impl ListNode {
-    fn new(val: i32) -> Self {
+    fn new(val: i32, next: Option<Box<ListNode>>) -> Self {
         ListNode {
             val,
-            next: None,
+            next,
         }
-    }
-
-    fn add_next(&mut self, val: i32) {
-        let new_node = ListNode {
-            val,
-            next: self.next.take(),
-        };
-        self.next = Some(Box::new(new_node));
     }
 
     fn traverse(&self){
@@ -56,17 +48,11 @@ fn main() {
                 for (index, str_entry) in split_string.iter().rev().enumerate() {
                     let int_entry = parse_str_to_int(str_entry);
                     if index == 0 {
-                        let new_node = ListNode{
-                            val: int_entry,
-                            next: None,
-                        };
+                        let new_node = ListNode::new(int_entry, None);
                         head_node_vec.push(new_node);
                     }
                     else {
-                        let new_node = ListNode{
-                            val: int_entry,
-                            next: Some(Box::new(head_node_vec.pop().unwrap())),
-                        };
+                        let new_node = ListNode::new(int_entry, Some(Box::new(head_node_vec.pop().unwrap())));
                         head_node_vec.push(new_node);
                     }
                 }
