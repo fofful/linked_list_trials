@@ -26,7 +26,7 @@ impl ListNode {
     let integer_value_int = integer_value_str.parse::<i32>();
     match integer_value_int {
         Ok(value) => return value,
-        Err(_) => return -1,
+        Err(_) => return 0,
     }
    }
  }
@@ -35,7 +35,7 @@ fn parse_str_to_int(str_value: &str) -> i32 {
     let result = str_value.parse::<i32>();
     match result {
         Ok(value) => return value,
-        Err(_) => return -1,
+        Err(_) => return 0,
     }
 }
 
