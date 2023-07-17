@@ -1,7 +1,6 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
-// Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]
 struct ListNode {
    val: i32,
@@ -23,6 +22,7 @@ impl ListNode {
             println!("{:?}", next.val);
             current = next;
         }
+        println!("\n");
    }
  }
 
@@ -34,10 +34,9 @@ fn parse_str_to_int(str_value: &str) -> i32 {
     }
 }
 
-fn main() {
+fn handle_file_to_linked_lists(file_path: &str) -> Vec<ListNode>{
     let mut head_node_vec: Vec<ListNode> = Vec::new();
-    let file_name = "./data/arrays.txt"; 
-    let file = File::open(file_name);
+    let file = File::open(file_path);
     match file{
         Ok(file) => {
             let reader = BufReader::new(file);
@@ -59,11 +58,21 @@ fn main() {
             }
         }
         Err(error) => {
-            println!("no file {} found, error {}", file_name, error)
+            println!("no file {} found, error {}", file_path, error)
         }
     }
-    println!("len of node: {:?}", head_node_vec[0]);
+    return head_node_vec
+}
+
+fn main() {
+    
+    let file_path = "./data/arrays.txt"; 
+    let head_node_vec: Vec<ListNode> = handle_file_to_linked_lists(file_path);
+    
+    println!("len of node: {:?}", head_node_vec.len());
     head_node_vec[0].traverse();
     head_node_vec[1].traverse();
+    head_node_vec[2].traverse();
+
 }
 
