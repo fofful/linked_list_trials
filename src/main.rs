@@ -15,22 +15,28 @@ impl ListNode {
         }
     }
 
-    fn traverse(&self){
-        let mut current = self;
-        println!("{:?}", current.val);
+   fn return_integer_value(&self) -> i32 {
+    let mut current = self;
+    let mut integer_value_str = current.val.to_string();
+
         while let Some(next) = &current.next{
-            println!("{:?}", next.val);
+            integer_value_str = integer_value_str.to_string() + &next.val.to_string();
             current = next;
         }
-        println!("\n");
+    let integer_value_int = integer_value_str.parse::<i32>();
+    match integer_value_int {
+        Ok(value) => return value,
+        Err(_) => return -1,
+    }
    }
+
  }
 
 fn parse_str_to_int(str_value: &str) -> i32 {
     let result = str_value.parse::<i32>();
     match result {
-        Ok(value) => value,
-        Err(_) => -1,
+        Ok(value) => return value,
+        Err(_) => return -1,
     }
 }
 
@@ -64,15 +70,21 @@ fn handle_file_to_linked_lists(file_path: &str) -> Vec<ListNode>{
     return head_node_vec
 }
 
+fn add_vec_values(values_vec: Vec<i32>) -> i32{
+    let added_sum: i32 = values_vec.iter().fold(0, |accumulator, &x| accumulator + x);
+    return added_sum
+}
+
 fn main() {
-    
     let file_path = "./data/arrays.txt"; 
     let head_node_vec: Vec<ListNode> = handle_file_to_linked_lists(file_path);
-    
-    println!("len of node: {:?}", head_node_vec.len());
-    head_node_vec[0].traverse();
-    head_node_vec[1].traverse();
-    head_node_vec[2].traverse();
+    let mut values_vec = Vec::new();
+    for node in head_node_vec{
+        values_vec.push(node.return_integer_value());
+    }
+    println!("added values: {:?}", values_vec);
+    let added_sum = add_vec_values(values_vec);
+    println!("added sum: {:?}", added_sum);
 
 }
 
